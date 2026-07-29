@@ -25,4 +25,19 @@ public class ProdutosController : ControllerBase
 
         return Ok(produtos);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Produto>> GetProduto(int id)
+    {
+        var produto = await _context.Produtos
+            .Include(p => p.Categoria)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (produto == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(produto);
+    }
 }
